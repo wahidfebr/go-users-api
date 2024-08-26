@@ -5,9 +5,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/wahidfebr/go-users-api/internal/config"
+	"github.com/wahidfebr/go-users-api/internal/container"
 	"github.com/wahidfebr/go-users-api/internal/user/delivery/http"
-	"github.com/wahidfebr/go-users-api/internal/user/repository"
-	"github.com/wahidfebr/go-users-api/internal/user/usecase"
 )
 
 func main() {
@@ -15,9 +14,9 @@ func main() {
 
 	app := fiber.New()
 
-	userRepo := repository.NewUserRepository()
-	userUseCase := usecase.NewUserUseCase(userRepo)
-	http.RegisterUserRoutes(app, userUseCase)
+	container := container.NewContainer()
+
+	http.RegisterUserRoutes(app, container.UserUseCase)
 
 	address := cfg.AppHost + ":" + cfg.AppPort
 	log.Printf("Server listening on port http://%s", address)
